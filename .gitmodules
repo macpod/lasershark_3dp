@@ -1,0 +1,3 @@
+[submodule "twostep/lasershark_hostapp"]
+	path = twostep/lasershark_hostapp
+	url = https://github.com/macpod/lasershark_hostapp.git
