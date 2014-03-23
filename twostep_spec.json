@@ -1,0 +1,202 @@
+[
+    {
+		"method": "getTwoStepJSONVersion",
+		"params": null,
+		"returns" : "string"	
+    },
+    {
+        "method": "setSteps",
+        "params": { 
+	    	"stepperNum": 0, 
+	    	"steps": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "setSafeSteps",
+        "params": { 
+	    	"stepperNum": 0, 
+	    	"steps": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "start",
+        "params": { 
+	    	"stepperOne": true,
+	    	"stepperTwo": true
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "stop",
+        "params": { 
+	    	"stepperOne": true,
+	    	"stepperTwo": true
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "getIsMoving",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string",	
+			"value": true
+		}
+    },
+    {
+        "method": "setEnable",
+        "params": { 
+	    	"stepperNum": 0, 
+	    	"enable": true
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "getEnable",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": true	
+		}
+    },
+    {
+        "method": "setMicrosteps",
+        "params": { 
+	    	"stepperNum": 0,
+	    	"value": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "getMicrosteps",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+        "method": "setDir",
+        "params": { 
+	    	"stepperNum": 0, 
+	    	"high": true
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"
+		}
+    },
+    {
+        "method": "getDir",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": true
+		}
+    },
+    {
+        "method": "setCurrent",
+        "params": { 
+	    	"stepperNum": 0, 
+	    	"value": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "getCurrent",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+        "method": "set100uSDelay",
+        "params": { 
+	    	"stepperNum": 0, 
+	    	"value": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+        "method": "get100uSDelay",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+		"method": "getSwitchStatus",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"A1": true,	
+			"A2": true,	
+			"B1": true,	
+			"B2": true	
+		}
+    },
+    {
+		"method": "getVersion",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0
+		}
+    },
+    {
+		"notification": "printText",
+        "params": { 
+            "text": "string"
+        }
+    }
+	// min/max values for each field eventually? Ugh.
+]
+
+

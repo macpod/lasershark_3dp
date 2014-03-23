@@ -1,0 +1,127 @@
+[
+    {
+		"method": "getLaserSharkJSONVersion",
+		"params": null,
+		"returns" : "string"	
+    },
+    {
+        "method": "sendLayer",
+        "params": { 
+	    	"xUpperLeftPos": 0, 
+	    	"yUpperLeftPos": 0,
+            "base64PNGData": "string"
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+		"method": "startLayer",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+		"method": "stopAndClearLayer",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
+		"method": "getLayerRunning",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": true	
+		}
+    },
+    {
+		"method": "getLayerDone",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": true	
+		}
+    },
+    {
+		"method": "getLayerErrorMessage",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": "string"	
+		}
+    },
+    {
+		"method": "getLayerTotalSamples",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+		"method": "getLayerSamplesLeft",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+		"method": "setSampleRate",
+		"params": { 
+	    	"rate": 0 
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"
+		}
+    },
+    {
+		"method": "getMaxSampleRate",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+		"method": "getResolution",
+		"params": null,
+		"returns" : {
+			"success": true,
+			"message": "string",
+			"value": 0	
+		}
+    },
+    {
+		"notification": "printText",
+        "params": { 
+            "text": "string"
+        }
+    }
+
+    // something to "obtain a lock" with the printer
+    // something to see if the printer is being used
+    // push new filter
+    // enable filter
+    // disable filter
+    // set setting
+    // get setting
+    // save setting on device
+    // set rate
+    // stepper stuff here.
+]
+
+
