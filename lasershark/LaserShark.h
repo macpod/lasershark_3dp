@@ -29,12 +29,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "AbstractLaserSharkLayer.h"
 
 /*
-	todo:
+	TODO:
 		allow for multiple lasershark connections
 		allow for listing of lasersharks
 		make singleton?
 		figure out 3.0 port issue
-		search for todo statements.
 		write clear samples command for lasershark
 */
 

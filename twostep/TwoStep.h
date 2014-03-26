@@ -35,7 +35,7 @@ class TwoStep
 
         void setSafeSteps(int stepperNum, int steps) throw (std::runtime_error);
         void setSteps(int stepperNum, int steps) throw (std::runtime_error);
-			// step until swithc!
+		void setStepUntilSwitch(int stepperNum) throw (std::runtime_error);
 	
         void start(bool stepperOne, bool stepperTwo) throw (std::runtime_error);
         void stop(bool stepperOne, bool stepperTwo) throw (std::runtime_error);
@@ -60,39 +60,6 @@ class TwoStep
 		void getSwitchStatus(bool& r1_a, bool &r1_b, bool &r2_a, bool &r2_b) throw (std::runtime_error);
 
         int getVersion() throw (std::runtime_error);
-
-
-
-
-/*
-int ls_ub_twostep_set_steps(libusb_device_handle *devh_ub, uint8_t stepper_num, uint32_t steps);
-int ls_ub_twostep_set_safe_steps(libusb_device_handle *devh_ub, uint8_t stepper_num, uint32_t steps);
-int ls_ub_twostep_set_step_until_switch(libusb_device_handle *devh_ub, uint8_t stepper_num);
-
-int ls_ub_twostep_start(libusb_device_handle *devh_ub, uint8_t stepper_bitfield);
-int ls_ub_twostep_stop(libusb_device_handle *devh_ub, uint8_t stepper_bitfield);
-
-int ls_ub_twostep_get_is_moving(libusb_device_handle *devh_ub, uint8_t stepper_num, bool *stepper_moving);
-
-int ls_ub_twostep_set_enable(libusb_device_handle *devh_ub, uint8_t stepper_num, bool enable);
-int ls_ub_twostep_get_enable(libusb_device_handle *devh_ub, uint8_t stepper_num, bool *enable);
-
-int ls_ub_twostep_set_microsteps(libusb_device_handle *devh_ub, uint8_t stepper_num, uint8_t microstep_bitfield);
-int ls_ub_twostep_get_microsteps(libusb_device_handle *devh_ub, uint8_t stepper_num, uint8_t *microstep_bitfield);
-
-int ls_ub_twostep_set_dir(libusb_device_handle *devh_ub, uint8_t stepper_num, bool high);
-int ls_ub_twostep_get_dir(libusb_device_handle *devh_ub, uint8_t stepper_num, bool *high);
-
-uint8_t ls_ub_twostep_set_current(libusb_device_handle *devh_ub, uint8_t stepper_num, uint16_t current);
-uint8_t ls_ub_twostep_get_current(libusb_device_handle *devh_ub, uint8_t stepper_num, uint16_t *current);
-
-uint8_t ls_ub_twostep_set_100uS_delay(libusb_device_handle *devh_ub, uint8_t stepper_num, uint16_t delay);
-uint8_t ls_ub_twostep_get_100uS_delay(libusb_device_handle *devh_ub, uint8_t stepper_num, uint16_t *delay);
-
-uint8_t ls_ub_twostep_get_switch_status(libusb_device_handle *devh_ub, uint8_t *switch_bitfield);
-*/
-//uint8_t ls_ub_twostep_get_version(libusb_device_handle *devh_ub, uint8_t *version);
-
 
 
 	private:

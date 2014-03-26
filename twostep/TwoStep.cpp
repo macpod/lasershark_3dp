@@ -90,7 +90,7 @@ bool TwoStep::connect() throw (std::runtime_error)
 
     ub_mutex.unlock();
 	
-	int version = getVersion();
+	D(int version = getVersion();)
 	D(std::cout << "version was: " << version << std::endl;)
 
 
@@ -143,6 +143,14 @@ void TwoStep::setSteps(int stepperNum, int steps) throw (std::runtime_error)
 	handleBadResponse(res);
 }
 
+void TwoStep::setStepUntilSwitch(int stepperNum) throw (std::runtime_error)
+{
+	ub_mutex.lock();
+	unsigned char res = ls_ub_twostep_set_step_until_switch(devh_ub, stepperNum);
+	ub_mutex.unlock();
+	
+	handleBadResponse(res);
+}
 
 void TwoStep::start(bool stepperOne, bool stepperTwo) throw (std::runtime_error)
 {
