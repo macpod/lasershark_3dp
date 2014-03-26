@@ -123,8 +123,8 @@ bool TwoStep::connected()
 
 void TwoStep::disconnect() 
 {
-	ub_mutex.lock();
 	stopAndDisable();
+	ub_mutex.lock();
 	release();
 	shutdown();
 	ub_mutex.unlock();
