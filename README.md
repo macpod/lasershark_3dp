@@ -9,3 +9,4 @@ Want to help? Please consider modifying the libjson-rpc-cpp and libusb finders t
 
 Everything else is still under development and likely to change so it is probably not worth modifying aside from if you want to add a new layer processor based on AbstractLaserSharkLayer
 
+<a href="http://www.macpod.net/stuff/lasershark_3dp/lasershark_3d_printer_overview.png"><img src="http://www.macpod.net/stuff/lasershark_3dp/lasershark_3d_printer_overview.png" width=500px></a>
