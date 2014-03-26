@@ -1,4 +1,4 @@
-# LaserShark 3D Printer Host Software
+## LaserShark Based 3D Printer Host Software
 
 For more information please see http://macpod.net
 
