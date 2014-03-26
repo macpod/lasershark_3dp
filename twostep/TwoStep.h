@@ -66,6 +66,8 @@ class TwoStep
 		void release();
 		void shutdown();
 
+		void stopAndDisable();
+
 		void handleBadResponse(unsigned char res) throw (std::runtime_error);
 
 		std::mutex ub_mutex;

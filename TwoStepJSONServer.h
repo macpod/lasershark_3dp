@@ -32,21 +32,22 @@ class TwoStepJSONServer : public AbstractTwoStepJSONServer
 
 		bool setLaserShark(TwoStep *twoStep);
 
+
         virtual Json::Value get100uSDelay(const int& stepperNum);
         virtual Json::Value getCurrent(const int& stepperNum);
         virtual Json::Value getDir(const int& stepperNum);
-        virtual Json::Value getEnable(const bool& enable, const int& stepperNum);
+        virtual Json::Value getEnable(const int& stepperNum);
         virtual Json::Value getIsMoving(const int& stepperNum);
         virtual Json::Value getMicrosteps(const int& stepperNum);
         virtual Json::Value getSwitchStatus();
         virtual std::string getTwoStepJSONVersion();
         virtual Json::Value getVersion();
         virtual void printText(const std::string& text);
-        virtual Json::Value set100uSDelay(const bool& enable, const int& stepperNum);
-        virtual Json::Value setCurrent(const bool& enable, const int& stepperNum);
+        virtual Json::Value set100uSDelay(const int& stepperNum, const int& value);
+        virtual Json::Value setCurrent(const int& stepperNum, const int& value);
         virtual Json::Value setDir(const bool& high, const int& stepperNum);
         virtual Json::Value setEnable(const bool& enable, const int& stepperNum);
-        virtual Json::Value setMicrosteps(const bool& enable, const int& stepperNum);
+        virtual Json::Value setMicrosteps(const int& stepperNum, const int& value);
         virtual Json::Value setSafeSteps(const int& stepperNum, const int& steps);
         virtual Json::Value setSteps(const int& stepperNum, const int& steps);
         virtual Json::Value start(const bool& stepperOne, const bool& stepperTwo);

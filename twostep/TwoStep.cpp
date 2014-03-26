@@ -124,7 +124,7 @@ bool TwoStep::connected()
 void TwoStep::disconnect() 
 {
 	ub_mutex.lock();
-//	stopAndClearLayer();
+	stopAndDisable();
 	release();
 	shutdown();
 	ub_mutex.unlock();
@@ -367,6 +367,20 @@ void TwoStep::shutdown()
         libusb_close(devh_ub);
 		devh_ub = NULL;
     }
+}
+
+
+void TwoStep::stopAndDisable()
+{
+	try { 
+		// We wouldn't want to disconnect and leave the motors running!
+		stop(true, true);
+		setEnable(TWOSTEP_STEPPER_1, false);
+		setEnable(TWOSTEP_STEPPER_2, false);
+
+	} catch (std::runtime_error e) {
+		std::cerr << "Error encountered" << e.what();
+	}	
 }
 
 

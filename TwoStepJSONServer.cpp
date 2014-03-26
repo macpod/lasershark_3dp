@@ -39,6 +39,13 @@ Json::Value TwoStepJSONServer::get100uSDelay(const int& stepperNum)
 		return ret;
 	}
 
+	try {
+		ret["value"] = twoStep->get100uSDelay(stepperNum);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
@@ -51,6 +58,13 @@ Json::Value TwoStepJSONServer::getCurrent(const int& stepperNum)
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		ret["value"] = twoStep->getCurrent(stepperNum);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
@@ -65,11 +79,18 @@ Json::Value TwoStepJSONServer::getDir(const int& stepperNum)
 		return ret;
 	}
 
+	try {
+		ret["value"] = twoStep->getDir(stepperNum);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
 
-Json::Value TwoStepJSONServer::getEnable(const bool& enable, const int& stepperNum)
+Json::Value TwoStepJSONServer::getEnable(const int& stepperNum)
 {
 	Json::Value ret;
 	prepForSuccess(ret);
@@ -77,6 +98,13 @@ Json::Value TwoStepJSONServer::getEnable(const bool& enable, const int& stepperN
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		ret["value"] = twoStep->getEnable(stepperNum);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
@@ -91,6 +119,13 @@ Json::Value TwoStepJSONServer::getIsMoving(const int& stepperNum)
 		return ret;
 	}
 
+	try {
+		ret["value"] = twoStep->getIsMoving(stepperNum);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
@@ -104,6 +139,13 @@ Json::Value TwoStepJSONServer::getMicrosteps(const int& stepperNum)
 		return ret;
 	}
 
+	try {
+		ret["value"] = twoStep->getMicrosteps(stepperNum);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
@@ -116,6 +158,18 @@ Json::Value TwoStepJSONServer::getSwitchStatus()
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		bool r1_a, r1_b, r2_a, r2_b;
+		twoStep->getSwitchStatus(r1_a, r1_b, r2_a, r2_b);
+		ret["R1_A"] = r1_a;
+		ret["R1_B"] = r1_b;
+		ret["R2_A"] = r2_a;
+		ret["R2_B"] = r2_b;
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
@@ -152,7 +206,7 @@ void TwoStepJSONServer::printText(const std::string& text)
 }
 
 
-Json::Value TwoStepJSONServer::set100uSDelay(const bool& enable, const int& stepperNum)
+Json::Value TwoStepJSONServer::set100uSDelay(const int& stepperNum, const int& value)
 {
 	Json::Value ret;
 	prepForSuccess(ret);
@@ -160,12 +214,19 @@ Json::Value TwoStepJSONServer::set100uSDelay(const bool& enable, const int& step
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		twoStep->set100uSDelay(stepperNum, value);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
 
 
-Json::Value TwoStepJSONServer::setCurrent(const bool& enable, const int& stepperNum)
+Json::Value TwoStepJSONServer::setCurrent(const int& stepperNum, const int& value)
 {
 	Json::Value ret;
 	prepForSuccess(ret);
@@ -174,22 +235,13 @@ Json::Value TwoStepJSONServer::setCurrent(const bool& enable, const int& stepper
 		return ret;
 	}
 
-/*
 	try {
-		if (!twoStep->setCurrent(rate)) {
-			prepForFailure(ret, "LaserShark could not set sample rate.");
-			return ret;
-		}
+		twoStep->setCurrent(stepperNum, value);
 	} catch (std::runtime_error e) {
         prepForFailure(ret, e.what());
         return ret;
     }
-*/
-/*
-	try {
-		if (!setCurrent(const bool& enable, const int& stepperNum) throw (std::runtime_error);
-	}
-*/
+
 	return ret;
 }
 
@@ -202,6 +254,13 @@ Json::Value TwoStepJSONServer::setDir(const bool& high, const int& stepperNum)
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		twoStep->setCurrent(stepperNum, high);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
@@ -216,11 +275,18 @@ Json::Value TwoStepJSONServer::setEnable(const bool& enable, const int& stepperN
 		return ret;
 	}
 
+	try {
+		twoStep->setEnable(stepperNum, enable);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
 
-Json::Value TwoStepJSONServer::setMicrosteps(const bool& enable, const int& stepperNum)
+Json::Value TwoStepJSONServer::setMicrosteps(const int& stepperNum, const int& value)
 {
 	Json::Value ret;
 	prepForSuccess(ret);
@@ -228,6 +294,13 @@ Json::Value TwoStepJSONServer::setMicrosteps(const bool& enable, const int& step
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		twoStep->setMicrosteps(stepperNum, value);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
@@ -242,6 +315,13 @@ Json::Value TwoStepJSONServer::setSafeSteps(const int& stepperNum, const int& st
 		return ret;
 	}
 
+	try {
+		twoStep->setSafeSteps(stepperNum, steps);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
@@ -254,6 +334,13 @@ Json::Value TwoStepJSONServer::setSteps(const int& stepperNum, const int& steps)
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		twoStep->setSteps(stepperNum, steps);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }
@@ -268,6 +355,13 @@ Json::Value TwoStepJSONServer::start(const bool& stepperOne, const bool& stepper
 		return ret;
 	}
 
+	try {
+		twoStep->start(stepperOne, stepperTwo);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
 	return ret;
 }
 
@@ -280,6 +374,13 @@ Json::Value TwoStepJSONServer::stop(const bool& stepperOne, const bool& stepperT
 	if (!checkTwoStepInitialization(ret)) {
 		return ret;
 	}
+
+	try {
+		twoStep->stop(stepperOne, stepperTwo);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
 
 	return ret;
 }

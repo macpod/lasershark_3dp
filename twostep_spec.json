@@ -175,10 +175,10 @@
 		"returns" : {
 			"success": true,
 			"message": "string",
-			"A1": true,	
-			"A2": true,	
-			"B1": true,	
-			"B2": true	
+			"R1_A": true,	
+			"R1_B": true,	
+			"R2_A": true,	
+			"R2_B": true	
 		}
     },
     {

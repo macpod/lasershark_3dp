@@ -19,7 +19,7 @@ class TwoStepJSONClient
             delete this->client;
         }
 
-        Json::Value get___uSDelay(const int& stepperNum) throw (jsonrpc::JsonRpcException)
+        Json::Value get100uSDelay(const int& stepperNum) throw (jsonrpc::JsonRpcException)
         {
             Json::Value p;
             p["stepperNum"] = stepperNum; 
@@ -141,7 +141,7 @@ class TwoStepJSONClient
             this->client->CallNotification("printText",p);
         }
 
-        Json::Value set___uSDelay(const int& stepperNum, const int& value) throw (jsonrpc::JsonRpcException)
+        Json::Value set100uSDelay(const int& stepperNum, const int& value) throw (jsonrpc::JsonRpcException)
         {
             Json::Value p;
             p["stepperNum"] = stepperNum; 
