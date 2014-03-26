@@ -161,10 +161,17 @@ bool LaserShark::connect() throw (std::runtime_error)
 
     cmd_mutex.unlock();
 	
-	//TODO wrap in try-catch?
-	setOutput(false);
-	// Set the default sample rate.
-	setSampleRate(LASERSHARK_DEFAULT_SAMPLE_RATE);
+	try {
+		setOutput(false);
+
+		// Set the default sample rate.
+		setSampleRate(LASERSHARK_DEFAULT_SAMPLE_RATE);
+	} catch (std::runtime_error e) {
+			disconnect(); 
+			std::ostringstream oss;
+			oss << "Error connecting: " << e.what();
+	    	throw std::runtime_error(oss.str());
+	}
 
     return true;
 }

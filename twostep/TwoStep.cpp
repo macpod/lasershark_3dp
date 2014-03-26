@@ -90,18 +90,26 @@ bool TwoStep::connect() throw (std::runtime_error)
 
     ub_mutex.unlock();
 	
-	D(int version = getVersion();)
-	D(std::cout << "version was: " << version << std::endl;)
+	try { 
+		D(int version = getVersion();)
+		D(std::cout << "version was: " << version << std::endl;)
 
+		stop(true, true);
+		setEnable(TWOSTEP_STEPPER_1, false);
+		setEnable(TWOSTEP_STEPPER_2, false);
 
-	stop(true, true);
-	setEnable(false, false);
-	setMicrosteps(TWOSTEP_STEPPER_1, TWOSTEP_MICROSTEP_BITFIELD_FULL_STEP);
-	setMicrosteps(TWOSTEP_STEPPER_2, TWOSTEP_MICROSTEP_BITFIELD_FULL_STEP);
-	setCurrent(TWOSTEP_STEPPER_1, TWOSTEP_MIN_CURRENT_VAL);
-	setCurrent(TWOSTEP_STEPPER_2, TWOSTEP_MIN_CURRENT_VAL);
-	set100uSDelay(TWOSTEP_STEPPER_1, TWOSTEP_STEP_100US_DELAY_5MS);
-	
+		setMicrosteps(TWOSTEP_STEPPER_1, TWOSTEP_MICROSTEP_BITFIELD_FULL_STEP);
+		setMicrosteps(TWOSTEP_STEPPER_2, TWOSTEP_MICROSTEP_BITFIELD_FULL_STEP);
+		setCurrent(TWOSTEP_STEPPER_1, TWOSTEP_MIN_CURRENT_VAL);
+		setCurrent(TWOSTEP_STEPPER_2, TWOSTEP_MIN_CURRENT_VAL);
+		set100uSDelay(TWOSTEP_STEPPER_1, TWOSTEP_STEP_100US_DELAY_5MS);
+
+	} catch (std::runtime_error e) {
+			disconnect(); 
+			std::ostringstream oss;
+			oss << "Error connecting: " << e.what();
+	    	throw std::runtime_error(oss.str());
+	}
 
     return true;
 }
@@ -172,7 +180,7 @@ void TwoStep::stop(bool stepperOne, bool stepperTwo) throw (std::runtime_error)
 }
 
 
-bool TwoStep::getIsMoving(const int& stepperNum) throw (std::runtime_error)
+bool TwoStep::getIsMoving(int stepperNum) throw (std::runtime_error)
 {
 	bool value;
 	ub_mutex.lock();
@@ -184,7 +192,7 @@ bool TwoStep::getIsMoving(const int& stepperNum) throw (std::runtime_error)
 }
 
 
-void TwoStep::setEnable(bool enable,  int stepperNum) throw (std::runtime_error)
+void TwoStep::setEnable(int stepperNum, bool enable) throw (std::runtime_error)
 {
 	ub_mutex.lock();
 	unsigned char res = ls_ub_twostep_set_enable(devh_ub, stepperNum, enable);
@@ -194,7 +202,7 @@ void TwoStep::setEnable(bool enable,  int stepperNum) throw (std::runtime_error)
 }
 
 
-bool TwoStep::getEnable(const int& stepperNum) throw (std::runtime_error)
+bool TwoStep::getEnable(int stepperNum) throw (std::runtime_error)
 {
 	bool value;
 	ub_mutex.lock();
@@ -216,7 +224,7 @@ void TwoStep::setMicrosteps(int stepperNum,  int microsteps) throw (std::runtime
 }
 
 
-unsigned int TwoStep::getMicrosteps(const int& stepperNum) throw (std::runtime_error)
+unsigned int TwoStep::getMicrosteps(int stepperNum) throw (std::runtime_error)
 {
 	unsigned char value;
 	ub_mutex.lock();
@@ -228,7 +236,7 @@ unsigned int TwoStep::getMicrosteps(const int& stepperNum) throw (std::runtime_e
 }
 
 
-void TwoStep::setDir(bool high,  int stepperNum) throw (std::runtime_error)
+void TwoStep::setDir(int stepperNum, bool high) throw (std::runtime_error)
 {
 	ub_mutex.lock();
 	unsigned char res = ls_ub_twostep_set_dir(devh_ub, stepperNum, high);
@@ -238,7 +246,7 @@ void TwoStep::setDir(bool high,  int stepperNum) throw (std::runtime_error)
 }
 
 
-bool TwoStep::getDir(const int& stepperNum) throw (std::runtime_error)
+bool TwoStep::getDir(int stepperNum) throw (std::runtime_error)
 {
 	bool high;
 	ub_mutex.lock();
@@ -261,7 +269,7 @@ void TwoStep::setCurrent(int stepperNum, int value) throw (std::runtime_error)
 }
 
 
-unsigned int TwoStep::getCurrent(const int& stepperNum) throw (std::runtime_error)
+unsigned int TwoStep::getCurrent(int stepperNum) throw (std::runtime_error)
 {
 	unsigned short value;
 	ub_mutex.lock();
@@ -283,7 +291,7 @@ void TwoStep::set100uSDelay(int stepperNum, int value) throw (std::runtime_error
 }
 
 
-unsigned int TwoStep::get100uSDelay(const int& stepperNum) throw (std::runtime_error)
+unsigned int TwoStep::get100uSDelay(int stepperNum) throw (std::runtime_error)
 {
 	unsigned short value;
 	ub_mutex.lock();

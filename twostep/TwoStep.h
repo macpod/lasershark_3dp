@@ -40,21 +40,21 @@ class TwoStep
         void start(bool stepperOne, bool stepperTwo) throw (std::runtime_error);
         void stop(bool stepperOne, bool stepperTwo) throw (std::runtime_error);
 
-        bool getIsMoving(const int& stepperNum) throw (std::runtime_error);
+        bool getIsMoving(int stepperNum) throw (std::runtime_error);
 
-        void setEnable(bool enable, int stepperNum) throw (std::runtime_error);
-        bool getEnable(const int& stepperNum) throw (std::runtime_error);
+        void setEnable(int stepperNum, bool enable) throw (std::runtime_error);
+        bool getEnable(const int stepperNum) throw (std::runtime_error);
 
         void setMicrosteps(int stepperNum, int value) throw (std::runtime_error);
-        unsigned int getMicrosteps(const int& stepperNum) throw (std::runtime_error);
+        unsigned int getMicrosteps(int stepperNum) throw (std::runtime_error);
 
-        void setDir(bool high, int stepperNum) throw (std::runtime_error);
-        bool getDir(const int& stepperNum) throw (std::runtime_error);
+        void setDir(int stepperNum, bool high) throw (std::runtime_error);
+        bool getDir(int stepperNum) throw (std::runtime_error);
 
         void setCurrent(int stepperNum, int value) throw (std::runtime_error);
-        unsigned int getCurrent(const int& stepperNum) throw (std::runtime_error);
+        unsigned int getCurrent(int stepperNum) throw (std::runtime_error);
 
-        unsigned int get100uSDelay(const int& stepperNum) throw (std::runtime_error);
+        unsigned int get100uSDelay(int stepperNum) throw (std::runtime_error);
         void set100uSDelay(int stepperNum, int value) throw (std::runtime_error);
 
 		void getSwitchStatus(bool& r1_a, bool &r1_b, bool &r2_a, bool &r2_b) throw (std::runtime_error);
