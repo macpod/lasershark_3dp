@@ -29,7 +29,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 const std::string LaserSharkJSONServer::LASERSHARK_JSON_SERVER_VERSION = "1";
 
 
-
 LaserSharkJSONServer::LaserSharkJSONServer() :
 	AbstractLaserSharkJSONServer(new jsonrpc::HttpServer(8080))
 {

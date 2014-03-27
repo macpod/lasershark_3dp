@@ -22,12 +22,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 const std::string TwoStepJSONServer::TWOSTEP_JSON_SERVER_VERSION = "1";
 
+
 TwoStepJSONServer::TwoStepJSONServer() :
-	AbstractTwoStepJSONServer(new jsonrpc::HttpServer(8080))
+	AbstractTwoStepJSONServer(new jsonrpc::HttpServer(8081))
 {
-//	twostep = NULL;
+	twoStep = NULL;
 }
 
+
+bool TwoStepJSONServer::setTwoStep(TwoStep *twoStep)
+{
+	if (this->twoStep) {
+		return false;
+	}
+	this->twoStep = twoStep;
+
+	return true;
+}
 
 
 Json::Value TwoStepJSONServer::get100uSDelay(const int& stepperNum)
@@ -200,6 +211,7 @@ Json::Value TwoStepJSONServer::getVersion()
 	return ret;
 }
 
+
 void TwoStepJSONServer::printText(const std::string& text)
 {
 	std::cout << text <<std::endl;
@@ -246,7 +258,7 @@ Json::Value TwoStepJSONServer::setCurrent(const int& stepperNum, const int& valu
 }
 
 
-Json::Value TwoStepJSONServer::setDir(const bool& high, const int& stepperNum)
+Json::Value TwoStepJSONServer::setDir(const int& stepperNum, const bool& high)
 {
 	Json::Value ret;
 	prepForSuccess(ret);
@@ -266,7 +278,7 @@ Json::Value TwoStepJSONServer::setDir(const bool& high, const int& stepperNum)
 }
 
 
-Json::Value TwoStepJSONServer::setEnable(const bool& enable, const int& stepperNum)
+Json::Value TwoStepJSONServer::setEnable(const int& stepperNum, const bool& enable)
 {
 	Json::Value ret;
 	prepForSuccess(ret);

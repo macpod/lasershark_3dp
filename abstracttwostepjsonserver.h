@@ -143,8 +143,8 @@ class AbstractTwoStepJSONServer : public jsonrpc::AbstractServer<AbstractTwoStep
         virtual void printText(const std::string& text) = 0;
         virtual Json::Value set100uSDelay(const int& stepperNum, const int& value) = 0;
         virtual Json::Value setCurrent(const int& stepperNum, const int& value) = 0;
-        virtual Json::Value setDir(const bool& high, const int& stepperNum) = 0;
-        virtual Json::Value setEnable(const bool& enable, const int& stepperNum) = 0;
+        virtual Json::Value setDir(const int& stepperNum, const bool& high) = 0;
+        virtual Json::Value setEnable(const int& stepperNum, const bool& enable) = 0;
         virtual Json::Value setMicrosteps(const int& stepperNum, const int& value) = 0;
         virtual Json::Value setSafeSteps(const int& stepperNum, const int& steps) = 0;
         virtual Json::Value setSteps(const int& stepperNum, const int& steps) = 0;

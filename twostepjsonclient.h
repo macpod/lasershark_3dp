@@ -169,7 +169,7 @@ p["value"] = value;
 
         }
 
-        Json::Value setDir(const bool& high, const int& stepperNum) throw (jsonrpc::JsonRpcException)
+        Json::Value setDir(const int& stepperNum, const bool& high) throw (jsonrpc::JsonRpcException)
         {
             Json::Value p;
             p["high"] = high; 
@@ -183,7 +183,7 @@ p["stepperNum"] = stepperNum;
 
         }
 
-        Json::Value setEnable(const bool& enable, const int& stepperNum) throw (jsonrpc::JsonRpcException)
+        Json::Value setEnable(const int& stepperNum, const bool& enable) throw (jsonrpc::JsonRpcException)
         {
             Json::Value p;
             p["enable"] = enable; 

@@ -30,8 +30,7 @@ class TwoStepJSONServer : public AbstractTwoStepJSONServer
 
 		static const std::string TWOSTEP_JSON_SERVER_VERSION;
 
-		bool setLaserShark(TwoStep *twoStep);
-
+		bool setTwoStep(TwoStep *twoStep);
 
         virtual Json::Value get100uSDelay(const int& stepperNum);
         virtual Json::Value getCurrent(const int& stepperNum);
@@ -45,8 +44,8 @@ class TwoStepJSONServer : public AbstractTwoStepJSONServer
         virtual void printText(const std::string& text);
         virtual Json::Value set100uSDelay(const int& stepperNum, const int& value);
         virtual Json::Value setCurrent(const int& stepperNum, const int& value);
-        virtual Json::Value setDir(const bool& high, const int& stepperNum);
-        virtual Json::Value setEnable(const bool& enable, const int& stepperNum);
+        virtual Json::Value setDir(const int& stepperNum, const bool& high);
+        virtual Json::Value setEnable(const int& stepperNum, const bool& enable);
         virtual Json::Value setMicrosteps(const int& stepperNum, const int& value);
         virtual Json::Value setSafeSteps(const int& stepperNum, const int& steps);
         virtual Json::Value setSteps(const int& stepperNum, const int& steps);
