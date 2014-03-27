@@ -169,7 +169,7 @@ Json::Value LaserSharkJSONServer::getResolution()
 
 void LaserSharkJSONServer::printText(const std::string& text)
 {
-	std::cout << text <<std::endl;
+	std::cout << "LaserSharkJSONServer: " << text <<std::endl;
 }
 
 

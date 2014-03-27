@@ -214,7 +214,7 @@ Json::Value TwoStepJSONServer::getVersion()
 
 void TwoStepJSONServer::printText(const std::string& text)
 {
-	std::cout << text <<std::endl;
+	std::cout << "TwoStepJSONServer: " << text <<std::endl;
 }
 
 

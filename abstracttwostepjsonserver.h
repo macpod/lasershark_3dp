@@ -25,8 +25,8 @@ class AbstractTwoStepJSONServer : public jsonrpc::AbstractServer<AbstractTwoStep
             this->bindAndAddNotification(new jsonrpc::Procedure("printText", jsonrpc::PARAMS_BY_NAME, "text",jsonrpc::JSON_STRING, NULL), &AbstractTwoStepJSONServer::printTextI);
             this->bindAndAddMethod(new jsonrpc::Procedure("set100uSDelay", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"value",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::set100uSDelayI);
             this->bindAndAddMethod(new jsonrpc::Procedure("setCurrent", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"value",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::setCurrentI);
-            this->bindAndAddMethod(new jsonrpc::Procedure("setDir", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "high",jsonrpc::JSON_BOOLEAN,"stepperNum",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::setDirI);
-            this->bindAndAddMethod(new jsonrpc::Procedure("setEnable", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "enable",jsonrpc::JSON_BOOLEAN,"stepperNum",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::setEnableI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("setDir", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"high",jsonrpc::JSON_BOOLEAN, NULL), &AbstractTwoStepJSONServer::setDirI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("setEnable", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"enable", jsonrpc::JSON_BOOLEAN, NULL), &AbstractTwoStepJSONServer::setEnableI);
             this->bindAndAddMethod(new jsonrpc::Procedure("setMicrosteps", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"value",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::setMicrostepsI);
             this->bindAndAddMethod(new jsonrpc::Procedure("setSafeSteps", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"steps",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::setSafeStepsI);
             this->bindAndAddMethod(new jsonrpc::Procedure("setSteps", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "stepperNum",jsonrpc::JSON_INTEGER,"steps",jsonrpc::JSON_INTEGER, NULL), &AbstractTwoStepJSONServer::setStepsI);
@@ -97,12 +97,12 @@ class AbstractTwoStepJSONServer : public jsonrpc::AbstractServer<AbstractTwoStep
 
         inline virtual void setDirI(const Json::Value& request, Json::Value& response) 
         {
-            response = this->setDir(request["high"].asBool(), request["stepperNum"].asInt());
+            response = this->setDir(request["stepperNum"].asInt(), request["high"].asBool());
         }
 
         inline virtual void setEnableI(const Json::Value& request, Json::Value& response) 
         {
-            response = this->setEnable(request["enable"].asBool(), request["stepperNum"].asInt());
+            response = this->setEnable(request["stepperNum"].asInt(), request["enable"].asBool());
         }
 
         inline virtual void setMicrostepsI(const Json::Value& request, Json::Value& response) 
