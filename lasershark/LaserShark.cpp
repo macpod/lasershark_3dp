@@ -184,8 +184,8 @@ bool LaserShark::connected()
 
 void LaserShark::disconnect() 
 {
-	cmd_mutex.lock();
 	stopAndClearLayer();
+	cmd_mutex.lock();
 	release();
 	shutdown();
 	cmd_mutex.unlock();
