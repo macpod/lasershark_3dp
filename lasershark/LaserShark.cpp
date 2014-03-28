@@ -277,7 +277,7 @@ bool LaserShark::startLayer() throw (std::runtime_error)
 		cleanupPushThread();
 		if (layer) {
 			thread_should_run = true;
-			thread_running = false;	
+			thread_running = true;	
 			push_thread = new std::thread(&LaserShark::pushLayerThread, this); 	
 			if (!push_thread) { // This should throw something
 				push_thread_mutex.unlock();
