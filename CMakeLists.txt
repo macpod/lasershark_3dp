@@ -79,7 +79,7 @@ target_link_libraries (lasershark_3dp ${LIBUSB_1_LIBRARIES} ${JSON_RPC_CPP_LIBRA
 
 
 
-
+include_directories(${CMAKE_SOURCE_DIR}/twostep/lasershark_hostapp)
 set(lasershark_3dp_client_SRC
 	lasershark_3dp_client.cpp
 	lasersharkjsonclient.h
