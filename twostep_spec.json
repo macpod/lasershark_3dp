@@ -27,6 +27,16 @@
 		}
     },
     {
+        "method": "setStepUntilSwitch",
+        "params": { 
+	    	"stepperNum": 0
+        },
+		"returns" : {
+			"success": true,
+			"message": "string"	
+		}
+    },
+    {
         "method": "start",
         "params": { 
 	    	"stepperOne": true,

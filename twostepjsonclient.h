@@ -225,6 +225,19 @@ p["steps"] = steps;
 
         }
 
+        Json::Value setStepUntilSwitch(const int& stepperNum) throw (jsonrpc::JsonRpcException)
+        {
+            Json::Value p;
+            p["stepperNum"] = stepperNum; 
+
+            Json::Value result = this->client->CallMethod("setStepUntilSwitch",p);
+    if (result.isObject())
+        return result;
+     else 
+         throw jsonrpc::JsonRpcException(jsonrpc::Errors::ERROR_CLIENT_INVALID_RESPONSE, result.toStyledString());
+
+        }
+
         Json::Value setSteps(const int& stepperNum, const int& steps) throw (jsonrpc::JsonRpcException)
         {
             Json::Value p;

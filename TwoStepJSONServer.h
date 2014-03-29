@@ -48,6 +48,7 @@ class TwoStepJSONServer : public AbstractTwoStepJSONServer
         virtual Json::Value setEnable(const int& stepperNum, const bool& enable);
         virtual Json::Value setMicrosteps(const int& stepperNum, const int& value);
         virtual Json::Value setSafeSteps(const int& stepperNum, const int& steps);
+        virtual Json::Value setStepUntilSwitch(const int& stepperNum);
         virtual Json::Value setSteps(const int& stepperNum, const int& steps);
         virtual Json::Value start(const bool& stepperOne, const bool& stepperTwo);
         virtual Json::Value stop(const bool& stepperOne, const bool& stepperTwo);

@@ -268,7 +268,7 @@ Json::Value TwoStepJSONServer::setDir(const int& stepperNum, const bool& high)
 	}
 
 	try {
-		twoStep->setCurrent(stepperNum, high);
+		twoStep->setDir(stepperNum, high);
 	} catch (std::runtime_error e) {
         prepForFailure(ret, e.what());
         return ret;
@@ -329,6 +329,26 @@ Json::Value TwoStepJSONServer::setSafeSteps(const int& stepperNum, const int& st
 
 	try {
 		twoStep->setSafeSteps(stepperNum, steps);
+	} catch (std::runtime_error e) {
+        prepForFailure(ret, e.what());
+        return ret;
+    }
+
+	return ret;
+}
+
+
+Json::Value TwoStepJSONServer::setStepUntilSwitch(const int& stepperNum)
+{
+	Json::Value ret;
+	prepForSuccess(ret);
+
+	if (!checkTwoStepInitialization(ret)) {
+		return ret;
+	}
+
+	try {
+		twoStep->setStepUntilSwitch(stepperNum);
 	} catch (std::runtime_error e) {
         prepForFailure(ret, e.what());
         return ret;
