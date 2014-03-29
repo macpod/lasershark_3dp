@@ -30,14 +30,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "TwoStep.h"
 #include "debug.h"
 
-/*
-out base64 library doesn't seem to be able to decode newlines in blocks very well.
-correct throws (shouldn't be strings)
-see if we need to check for connected state for lasershark/twostep or if it will work fine as-is
-for both twostep and lasershark, shouldn't you check the version before running? Also shouldn't you bail and disconnect if getting initial conditions fails?
-	yes.
-
-*/
 
 using namespace std;
 using namespace jsonrpc;
@@ -61,7 +53,7 @@ static void sig_hdlr(int signum)
         do_exit = 1;
         break;
     default:
-        printf("what\n");
+        printf("Received unexpected signal\n");
     }
 }
 
@@ -90,8 +82,9 @@ int main(int argc, char** argv)
     try
     {
         if (!ls.connect()) {
-			cerr << "Could not connect to lasershark" << endl;
-			return 1;
+			std::ostringstream oss;
+			oss << "Could not connect to LaserShark.";
+	    	throw std::runtime_error(oss.str());
 		}
     }
     catch (runtime_error e)
@@ -104,93 +97,75 @@ int main(int argc, char** argv)
     try
     {
         if (!ts.connect()) {
-			cerr << "Could not connect to twostep via lasershark" << endl;
-			return 1;
+			std::ostringstream oss;
+			oss << "Could not connect to TwoStep via LaserShark.";
+	    	throw std::runtime_error(oss.str());
 		}
     }
     catch (runtime_error e)
     {
         cerr << e.what() << endl;
-    	try
-    	{
-    	    cout << "lasershark disconnecting...starting" << endl;
-    	    ls.disconnect();
-    	    cout << "lasershark disconnecting...end" << endl;
 
-    	}
-    	catch (runtime_error e)
-    	{
-    	    cerr << e.what() << endl;
- 	   	}
+        cout << "LaserShark disconnecting" << endl;
+    	ls.disconnect();
+
 		libusb_exit(NULL);		
         return 1;
     }
 
 
-
     try
     {
-        LaserSharkJSONServer serv;
-		serv.setLaserShark(&ls);
-        if (serv.StartListening())
-        {
+        LaserSharkJSONServer ls_serv;
+        TwoStepJSONServer ts_serv;
+		ls_serv.setLaserShark(&ls);
+		ts_serv.setTwoStep(&ts);
 
-            cout << "Server started successfully. Type ctrl-c to quit." << endl;
+        if (!ls_serv.StartListening()) {
+			std::ostringstream oss;
+			oss << "Error encountered initializing LaserShark JSON server.";
+	    	throw std::runtime_error(oss.str());
+		}
 
-		    sigemptyset (&mask);
-		    sigaddset (&mask, SIGUSR1);
+        if (!ts_serv.StartListening()) {
+			std::ostringstream oss;
+			oss << "Error encountered initializing TwoStep JSON server.";
+	    	throw std::runtime_error(oss.str());
+		}
 
-    		sigprocmask (SIG_BLOCK, &mask, &oldmask);
 
-			cout << "Entering loop" << endl;
-			while (!do_exit) {
-			    sigsuspend (&oldmask);
-			    printf("Looping... (Must have recieved a signal, don't panic).\n");
-			}
-		    sigprocmask (SIG_UNBLOCK, &mask, NULL);
-			cout << "Exiting loop" << endl;
-			ls.stopAndClearLayer();
+        cout << "Servers started successfully. Type ctrl-c to quit." << endl;
 
-            serv.StopListening();
-        }
-        else
-        {
-            cout << "Error starting Server" << endl;
-        }
+		sigemptyset (&mask);
+		sigaddset (&mask, SIGUSR1);
+
+    	sigprocmask (SIG_BLOCK, &mask, &oldmask);
+
+		cout << "Entering loop" << endl;
+		while (!do_exit) {
+		    sigsuspend (&oldmask);
+		    printf("Looping... (Must have recieved a signal, don't panic)\n");
+		}
+	    sigprocmask (SIG_UNBLOCK, &mask, NULL);
+		cout << "Exiting loop" << endl;
+
+        ls_serv.StopListening();
+        ts_serv.StopListening();
     }
-    catch (jsonrpc::JsonRpcException& e)
-    {
+    catch (jsonrpc::JsonRpcException& e) {
         cerr << e.what() << endl;
     }
-    catch (const char * msg)
-    {
-        cerr << msg << endl;
-    }
-
-
-    try
-    {
-        cout << "lasershark disconnecting...starting" << endl;
-        ls.disconnect();
-        cout << "lasershark disconnecting...end" << endl;
-    }
-    catch (runtime_error e)
-    {
+    catch (runtime_error e) {
         cerr << e.what() << endl;
     }
 
 
-    try
-    {
-        cout << "twostep disconnecting...starting" << endl;
-        ts.disconnect();
-        cout << "twostep disconnecting...end" << endl;
-    }
-    catch (runtime_error e)
-    {
-        cerr << e.what() << endl;
-    }
-
+	cout << "TwoStep disconnecting" << endl;
+    ts.disconnect();
+    
+	cout << "LaserShark disconnecting" << endl;
+    ls.disconnect();
+    
 
 	libusb_exit(NULL);
     return 0;
