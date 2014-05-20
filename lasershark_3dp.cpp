@@ -22,6 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <exception>
 #include <unistd.h>
 #include <signal.h>
+#include <string.h>
 
 #include "LaserSharkJSONServer.h"
 #include "LaserShark.h"
@@ -57,13 +58,41 @@ static void sig_hdlr(int signum)
 }
 
 
+void print_help(char* program)
+{
+    cout << program << "[--help|--lasershark_only]" << endl;
+    cout << "\t--help - Prints this help text" << endl;
+    cout << "\t--lasershark_only -- Initializes and uses LaserShark component only." << endl;
+}
+
+
 int main(int argc, char** argv)
 {
     int rc;
     LaserShark ls;
     TwoStep ts;
+    bool ls_only = false;
     struct sigaction sigact;
 
+    if (argc > 2) {
+        cerr << "Invalid args" << endl;
+        print_help(argv[0]);
+        return 1;
+    }
+
+    if (argc == 2) {
+        if (0 == strcmp(argv[1], "--lasershark_only")) {
+            ls_only = true;
+
+        } else if (0 == strcmp(argv[1], "--help")) {
+            print_help(argv[0]);
+            return 0;
+        } else {
+            cerr << "Invalid args" << endl;
+            print_help(argv[0]);
+            return 1;
+        }
+    }
 
     rc = libusb_init(NULL);
     if (rc < 0) {
@@ -90,28 +119,31 @@ int main(int argc, char** argv)
     }
 
 
-    try {
-        if (!ts.connect()) {
-            std::ostringstream oss;
-            oss << "Could not connect to TwoStep via LaserShark.";
-            throw std::runtime_error(oss.str());
+    if (!ls_only) {
+        try {
+            if (!ts.connect()) {
+                std::ostringstream oss;
+                oss << "Could not connect to TwoStep via LaserShark.";
+                throw std::runtime_error(oss.str());
+            }
+        } catch (runtime_error e) {
+            cerr << e.what() << endl;
+
+            cout << "LaserShark disconnecting" << endl;
+            ls.disconnect();
+
+            libusb_exit(NULL);
+            return 1;
         }
-    } catch (runtime_error e) {
-        cerr << e.what() << endl;
-
-        cout << "LaserShark disconnecting" << endl;
-        ls.disconnect();
-
-        libusb_exit(NULL);
-        return 1;
     }
-
 
     try {
         LaserSharkJSONServer ls_serv;
         TwoStepJSONServer ts_serv;
         ls_serv.setLaserShark(&ls);
-        ts_serv.setTwoStep(&ts);
+        if (!ls_only) {
+            ts_serv.setTwoStep(&ts);
+        }
 
         if (!ls_serv.StartListening()) {
             std::ostringstream oss;
@@ -119,12 +151,13 @@ int main(int argc, char** argv)
             throw std::runtime_error(oss.str());
         }
 
-        if (!ts_serv.StartListening()) {
-            std::ostringstream oss;
-            oss << "Error encountered initializing TwoStep JSON server.";
-            throw std::runtime_error(oss.str());
+        if (!ls_only) {
+            if (!ts_serv.StartListening()) {
+                std::ostringstream oss;
+                oss << "Error encountered initializing TwoStep JSON server.";
+                throw std::runtime_error(oss.str());
+            }
         }
-
 
         cout << "Servers started successfully. Type ctrl-c to quit." << endl;
 
@@ -142,16 +175,19 @@ int main(int argc, char** argv)
         cout << "Exiting loop" << endl;
 
         ls_serv.StopListening();
-        ts_serv.StopListening();
+        if (!ls_only) {
+            ts_serv.StopListening();
+        }
     } catch (jsonrpc::JsonRpcException& e) {
         cerr << e.what() << endl;
     } catch (runtime_error e) {
         cerr << e.what() << endl;
     }
 
-
-    cout << "TwoStep disconnecting" << endl;
-    ts.disconnect();
+    if (!ls_only) {
+        cout << "TwoStep disconnecting" << endl;
+        ts.disconnect();
+    }
 
     cout << "LaserShark disconnecting" << endl;
     ls.disconnect();
