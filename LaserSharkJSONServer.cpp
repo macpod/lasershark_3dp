@@ -19,6 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "LaserSharkJSONServer.h"
 #include <jsonrpc/rpc.h>
+#include <jsonrpc/connectors/httpserver.h>
 #include <iostream>
 
 #include "base64/base64_cpp.h"

@@ -61,7 +61,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 // Version Info
 #define LASERSHARK_FW_MAJOR_VERSION 2
-#define LASERSHARK_FW_MINOR_VERSION 2 
+#define LASERSHARK_FW_MINOR_VERSION 3
 #define LASERSHARK_CMD_GET_LASERSHARK_FW_MAJOR_VERSION 0X8B
 #define LASERSHARK_GMD_GET_LASERSHARK_FW_MINOR_VERSION 0X8C
 
@@ -96,6 +96,9 @@ LaserShark::~LaserShark()
 bool LaserShark::connect() throw (std::runtime_error)
 {
 	int rc;
+	int major_version;
+	int minor_version;
+
 	cmd_mutex.lock();
 	if (connected()) {
 		// Already connected.
@@ -126,7 +129,6 @@ bool LaserShark::connect() throw (std::runtime_error)
 
 		std::ostringstream oss;
 		oss << "Error claiming control interface: " << libusb_error_name(rc);
-		std::cerr << oss << std::endl;
     	throw std::runtime_error(oss.str()); 
     }
 	devh_ctl_claimed = true;
@@ -160,8 +162,25 @@ bool LaserShark::connect() throw (std::runtime_error)
     }
 
     cmd_mutex.unlock();
+
 	
 	try {
+		major_version = getFWMajorVersion();
+		minor_version = getFWMinorVersion();
+
+        if (major_version == -1 || minor_version == -1) {
+		std::ostringstream oss;
+		oss << "Error acquiring LaserShark board firmware version info.";
+		throw std::runtime_error(oss.str());
+        } else if (LASERSHARK_FW_MAJOR_VERSION != major_version ||LASERSHARK_FW_MINOR_VERSION != minor_version) {
+		std::ostringstream oss;
+		oss << "Lasershark firmware incompatible with this program. Was "
+                << major_version << "." << minor_version
+                << " but should be " << LASERSHARK_FW_MAJOR_VERSION << "." << LASERSHARK_FW_MINOR_VERSION;
+		throw std::runtime_error(oss.str());
+        }
+
+
 		setOutput(false);
 
 		// Set the default sample rate.
@@ -224,18 +243,24 @@ unsigned int LaserShark::getResolution()  throw (std::runtime_error)
 	return getUint32(LASERSHARK_CMD_GET_DAC_MAX, &tmp) ? tmp : 0;
 }
 
-
-unsigned int LaserShark::getFWMajorVersion() throw (std::runtime_error)
+/*
+	Returns -1 if unconnected, a lasershark protocol failure occured, or the resolution.
+	Throws an error on transport faults.
+*/
+int LaserShark::getFWMajorVersion() throw (std::runtime_error)
 {
 	unsigned int tmp;
-	return getUint32(LASERSHARK_CMD_GET_DAC_MAX, &tmp) ? tmp : 0;
+	return getUint32(LASERSHARK_CMD_GET_LASERSHARK_FW_MAJOR_VERSION, &tmp) ? tmp : -1;
 }
 
-
-unsigned int LaserShark::getFWMinorVersion() throw (std::runtime_error)
+/*
+	Returns -1 if unconnected, a lasershark protocol failure occured, or the resolution.
+	Throws an error on transport faults.
+*/
+int LaserShark::getFWMinorVersion() throw (std::runtime_error)
 {
 	unsigned int tmp;
-	return getUint32(LASERSHARK_CMD_GET_DAC_MAX, &tmp) ? tmp : 0;
+	return getUint32(LASERSHARK_GMD_GET_LASERSHARK_FW_MINOR_VERSION, &tmp) ? tmp : -1;
 }
 
 
@@ -510,7 +535,7 @@ void LaserShark::pushLayerThread()
 	// If we don't do this not all samples may be printed!
 	try {
 		
-		while (thread_should_run && getRingbufferEmptySampleCount() != ringbuffer_samples - 1) {
+		while (thread_should_run && getRingbufferEmptySampleCount() != ringbuffer_samples) {
 			asm("nop");
 		}
 	} catch (std::runtime_error e) {

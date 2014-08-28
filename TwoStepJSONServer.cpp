@@ -19,6 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "TwoStepJSONServer.h"
 #include <jsonrpc/rpc.h>
+#include <jsonrpc/connectors/httpserver.h>
 
 const std::string TwoStepJSONServer::TWOSTEP_JSON_SERVER_VERSION = "1";
 

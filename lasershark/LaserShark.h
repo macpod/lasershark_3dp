@@ -54,8 +54,8 @@ class LaserShark
 
 		unsigned int getResolution() throw (std::runtime_error);
 
-		unsigned int getFWMajorVersion() throw (std::runtime_error);
-		unsigned int getFWMinorVersion() throw (std::runtime_error);
+		int getFWMajorVersion() throw (std::runtime_error);
+		int getFWMinorVersion() throw (std::runtime_error);
 
 		bool setLayer(AbstractLaserSharkLayer *layer);
 
