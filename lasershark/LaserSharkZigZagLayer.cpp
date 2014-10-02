@@ -130,10 +130,10 @@ unsigned int LaserSharkZigZagLayer::fillLaserSharkTransferBuffer(unsigned int sa
 	    unsigned short y	: 16;
 	} __attribute__((packed)) *sample = (laserSharkSample*)buf;
 
-
-	if (sample_count > samples_left) {
+    // This is being removed.. we send "blank" pixels and that could definitely be more than samples_left
+	/*if (sample_count > samples_left) {
 		sample_count = samples_left;
-	}
+	}*/
 
 	if (sample_count == 0) {
 		return 0;
@@ -141,43 +141,40 @@ unsigned int LaserSharkZigZagLayer::fillLaserSharkTransferBuffer(unsigned int sa
 
 	unsigned int count = 0;
 	
-	for (; count < sample_count && curr_y_pos < height; curr_y_pos += (count < sample_count) ? 1 : 0) {
-		if (curr_y_pos % 2) {	
-			for (; count < sample_count && curr_x_pos < width; curr_x_pos += (count < sample_count) ? 1 : 0) {
-				int val = (image[curr_y_pos*width + curr_x_pos] << 4) / 8; // Change to 12 bit TODO (remove divide by 8)
-				sample[count].a = 0;//val;
-				sample[count].c = 0;//val > 2048 ? true : false; 
-				sample[count].intl_a = true; 
-				sample[count].b = val;
-				sample[count].x = curr_x_pos + x_origin;
-				sample[count].y = curr_y_pos + y_origin;
-				count++;
-			}
-			if (count < sample_count) {
-				curr_x_pos = width-1;
-			}
-		} else {
-			for (; count < sample_count && curr_x_pos + 1 >  0; curr_x_pos -= (count < sample_count) ? 1 : 0) {
-				int val = (image[curr_y_pos*width + curr_x_pos] << 4) / 8; // Change to 12 bit TODO (remove divide by 8)
-				sample[count].a = 0;//val;
-				sample[count].c = 0;//val > 2048 ? true : false; 
-				sample[count].intl_a = true; 
-				sample[count].b = val;
-				sample[count].x = curr_x_pos + x_origin;
-				sample[count].y = curr_y_pos + y_origin;
-				count++;
-			}
-			if (count < sample_count) {
-				curr_x_pos = 0;
-			}
+
+	while (count < sample_count) {
+        int val = (image[curr_y_pos*width + curr_x_pos] << 4); // Change to 12 bit TODO (remove divide by 8)
+		sample[count].a = val;
+		sample[count].c = val > 2048 ? true : false; 
+		sample[count].intl_a = true; 
+		sample[count].b = val;
+		sample[count].x = curr_x_pos + x_origin;
+		sample[count].y = curr_y_pos + y_origin;
+		count++;
+		
+		if (val) {
+		    samples_left--;
 		}
+
+        printf("\tx:\t%d\ty:\t%d\t= %d\n", curr_y_pos, curr_x_pos, val);
+
+
+        if (curr_y_pos & 1) { // Odd row
+			if (curr_x_pos == 0) {
+			    curr_y_pos++;
+            } else {
+                curr_x_pos--;
+            }        
+        } else { // Even row
+            if (curr_x_pos == width-1) {
+                curr_y_pos++;
+            } else {
+                curr_x_pos++;
+            }
+        }
 	}
-
-	samples_left -= count;
-
+	
 	D(std::cout << "sl: " << samples_left << " y: " << curr_y_pos << " x: " << curr_x_pos << std::endl;)
-
-
 
 	return count;
 	
